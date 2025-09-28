@@ -84,22 +84,14 @@ export function PrizeModal({ prize, isOpen, onClose }: PrizeModalProps) {
             <p className="text-muted-foreground leading-relaxed max-w-sm mx-auto">{prize.description}</p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          <div className="flex justify-center pt-2">
             <Button
               onClick={onClose}
               size="lg"
-              className="flex-1 h-12 text-lg font-semibold gradient-primary hover:opacity-90 text-white border-0 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+              className="px-8 h-12 text-lg font-semibold gradient-primary hover:opacity-90 text-white border-0 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
             >
               <Sparkles className="w-5 h-5 mr-2" />
               太棒了！
-            </Button>
-            <Button
-              variant="outline"
-              onClick={onClose}
-              size="lg"
-              className="flex-1 h-12 text-lg font-medium border-2 border-primary/20 text-primary hover:bg-primary/5 hover:border-primary/40 rounded-xl transition-all duration-300 bg-card/50 backdrop-blur-sm"
-            >
-              继续游戏
             </Button>
           </div>
         </CardContent>

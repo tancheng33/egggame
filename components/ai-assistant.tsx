@@ -26,7 +26,7 @@ const eggHints = [
   { id: 7, hint: "英伦文化的精致体现，喝水也能很有艺术感～", emoji: "🏛️" },
   { id: 8, hint: "随时随地享受热水，小巧便携的温暖陪伴！", emoji: "🔥" },
   { id: 9, hint: "东方美学的香氛艺术，优雅气质的完美诠释～", emoji: "🌸" },
-  { id: 10, hint: "厨房里的艺术品，让烹饪变成一种享受！", emoji: "👨‍🍳" },
+  { id: 10, hint: "来自智利的醇香佳酿，浪漫品鉴时光！", emoji: "🍷" },
   { id: 11, hint: "迪士尼的魔法加上传统工艺，已经绝版的珍贵收藏！", emoji: "✨" },
   { id: 12, hint: "海洋的奢华秘密，让肌肤重获新生的传奇面霜！", emoji: "🌊" },
 ]
@@ -102,16 +102,6 @@ export function AIAssistant({ selectedEggId, openedEggs, onHintRequest, isShakin
 
   // 机器人GIF组件
   const RobotGif = () => {
-    // 通过添加时间戳强制重新加载gif来触发动画
-    const [gifKey, setGifKey] = useState(Date.now())
-    
-    // 当机器人状态改变时重新加载gif (摇一摇时不重新加载)
-    useEffect(() => {
-      if (robotExpression === 'excited' || robotExpression === 'thinking') {
-        setGifKey(Date.now())
-      }
-    }, [robotExpression])
-    
     return (
       <div className={cn(
         "relative w-80 h-80 rounded-3xl overflow-hidden transform transition-all duration-300",
@@ -120,20 +110,29 @@ export function AIAssistant({ selectedEggId, openedEggs, onHintRequest, isShakin
       )}>
         {/* 机器人GIF */}
         <img 
-          key={gifKey}
-          src={`/bot.gif?t=${gifKey}`}
+          src="/bot.gif"
           alt="AI Robot Assistant"
           className={cn(
             "w-full h-full object-cover rounded-3xl transition-all duration-300",
-            robotExpression === 'excited' && "brightness-110",
-            robotExpression === 'thinking' && "brightness-105",
+            robotExpression === 'excited' && "brightness-110 saturate-110",
+            robotExpression === 'thinking' && "brightness-105 hue-rotate-15",
+            robotExpression === 'shaking' && "brightness-125 saturate-125",
             robotExpression === 'idle' && "brightness-90"
           )}
           draggable={false}
           loading="eager"
         />
         
-        {/* 状态光环效果已移除 */}
+        {/* 添加动态效果覆盖层 */}
+        {robotExpression === 'excited' && (
+          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-yellow-400/20 via-transparent to-pink-400/20 animate-pulse" />
+        )}
+        {robotExpression === 'thinking' && (
+          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-400/20 via-transparent to-purple-400/20 animate-pulse" />
+        )}
+        {robotExpression === 'shaking' && (
+          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-orange-400/30 via-transparent to-red-400/30 animate-ping" />
+        )}
       </div>
     )
   }

@@ -17,8 +17,8 @@ const prizes = [
   { id: 7, name: "翡翠手串", price: "¥200", description: "温润含蓄的东方之美，佩戴吉祥" },
   { id: 8, name: "摩飞烧水杯", price: "¥200", description: "便携电热水杯，随时享受热水" },
   { id: 9, name: "观夏香氛礼盒", price: "¥300", description: "东方香调香氛，优雅气质" },
-  { id: 10, name: "珐琅锅", price: "¥348", description: "高品质厨具，烹饪美食" },
-  { id: 11, name: "谭木匠迪士尼联名气垫梳", price: "¥600", description: "限量版收藏，已绝版" },
+  { id: 10, name: "智利红酒礼盒", price: "¥600", description: "精选智利红酒，浪漫品鉴" },
+  { id: 11, name: "谭木匠迪士尼联名气垫梳", price: "¥600", description: "限量版收藏" },
   { id: 12, name: "La Mer 经典面霜", price: "¥1500", description: "奢华护肤品，肌肤新生" },
 ]
 
@@ -215,10 +215,10 @@ export default function WeddingGoldenEggGame() {
       "拿在手里就像握住一段设计感"
     ])
     
-    if (name.includes("珐琅锅") || name.includes("锅")) return pick([
-      "厨房那边在发光…", 
-      "时间被慢慢炖出了香气…",
-      "下一顿饭，值得被期待"
+    if (name.includes("红酒") || name.includes("酒")) return pick([
+      "醇香在空气中慢慢散开…", 
+      "时光与葡萄的完美邂逅…",
+      "浪漫的夜晚值得被珍藏"
     ])
     
     if (name.includes("面霜") || name.includes("La Mer") || name.includes("面部")) return pick([

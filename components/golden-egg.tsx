@@ -32,7 +32,7 @@ export function GoldenEgg({ id, isOpened, onClick, onShake, onShakeStart, onShak
     { id: 7, hint: "英伦文化的精致体现，喝水也能很有艺术感～", emoji: "🏛️" },
     { id: 8, hint: "随时随地享受热水，小巧便携的温暖陪伴！", emoji: "🔥" },
     { id: 9, hint: "东方美学的香氛艺术，优雅气质的完美诠释～", emoji: "🌸" },
-    { id: 10, hint: "厨房里的艺术品，让烹饪变成一种享受！", emoji: "👨‍🍳" },
+    { id: 10, hint: "来自智利的醇香佳酿，浪漫品鉴时光！", emoji: "🍷" },
     { id: 11, hint: "迪士尼的魔法加上传统工艺，已经绝版的珍贵收藏！", emoji: "✨" },
     { id: 12, hint: "海洋的奢华秘密，让肌肤重获新生的传奇面霜！", emoji: "🌊" },
   ]
