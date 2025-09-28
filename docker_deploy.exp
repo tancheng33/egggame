@@ -1,0 +1,26 @@
+#!/usr/bin/expect
+set timeout 300
+spawn ssh -o StrictHostKeyChecking=no root@106.14.32.99
+expect "password:"
+send "jQ5nyV\$GYquHC#YgC62U&p252sss\r"
+expect "# "
+send "apt-get update\r"
+expect "# "
+send "apt-get install -y docker.io docker-compose\r"
+expect "# "
+send "systemctl start docker\r"
+expect "# "
+send "systemctl enable docker\r"
+expect "# "
+send "cd /var/www/wedding-game\r"
+expect "# "
+send "docker-compose down 2>/dev/null || true\r"
+expect "# "
+send "docker-compose up -d --build\r"
+expect "# "
+send "docker ps\r"
+expect "# "
+send "docker logs wedding-golden-egg-game\r"
+expect "# "
+send "exit\r"
+expect eof

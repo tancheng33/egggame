@@ -1,0 +1,6 @@
+#!/usr/bin/expect
+set timeout 30
+spawn scp -o StrictHostKeyChecking=no docker-deploy.tar.gz root@106.14.32.99:/var/www/wedding-game/
+expect "password:"
+send "jQ5nyV\$GYquHC#YgC62U&p252sss\r"
+expect eof

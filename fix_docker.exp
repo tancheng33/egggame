@@ -1,0 +1,24 @@
+#!/usr/bin/expect
+set timeout 300
+spawn ssh -o StrictHostKeyChecking=no root@106.14.32.99
+expect "password:"
+send "jQ5nyV\$GYquHC#YgC62U&p252sss\r"
+expect "# "
+send "mkdir -p /etc/docker\r"
+expect "# "
+send "cat > /etc/docker/daemon.json << 'DOCKER_EOF'\n{\n  \"registry-mirrors\": [\n    \"https://docker.mirrors.ustc.edu.cn\",\n    \"https://hub-mirror.c.163.com\",\n    \"https://mirror.baidubce.com\"\n  ]\n}\nDOCKER_EOF\r"
+expect "# "
+send "systemctl restart docker\r"
+expect "# "
+send "cd /var/www/wedding-game\r"
+expect "# "
+send "docker-compose up -d --build\r"
+expect "# "
+send "sleep 15\r"
+expect "# "
+send "docker ps\r"
+expect "# "
+send "docker logs wedding-golden-egg-game\r"
+expect "# "
+send "exit\r"
+expect eof

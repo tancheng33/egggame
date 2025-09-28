@@ -167,64 +167,48 @@ export default function WeddingGoldenEggGame() {
     
     if (!name) return pick(["这颗蛋有点特别…", "我感觉到一份贴心的小物…"])
     
+    if (name.includes("百福") || name.includes("养生锤") || name.includes("锤")) return pick([
+      "它不说话，但能让你发出\"啊~\"的声音。"
+    ])
+    
     if (name.includes("咖啡")) return pick([
-      "闻起来像清晨的味道…", 
-      "空气里有烘焙的香气…",
-      "比闹钟更懂你起床的东西"
+      "液体灵感，社畜燃料，DDL伴侣。"
     ])
     
     if (name.includes("手串") || name.includes("翡翠")) return pick([
-      "有股温润的气息…", 
-      "像把好运做成圆的…",
-      "会越戴越有故事的那种"
+      "美团现在要收你3块一小时"
     ])
     
     if (name.includes("电动牙刷") || name.includes("牙刷")) return pick([
-      "听到很乖的嗡嗡声…", 
-      "每天两次，帮笑容加分…",
-      "是认真生活的开关之一"
+      "滋滋滋"
     ])
     
     if (name.includes("充电宝")) return pick([
-      "电量在悄悄回升…", 
-      "安全感像在回血…",
-      "口袋里的后援团到了"
+      "你可能抽不到\"亲生的\"，但一定能收获一个\"娃\"。"
     ])
     
     if (name.includes("盲盒")) return pick([
-      "心跳有点不对称…", 
-      "打开前谁也不知道…",
-      "今天的你会和一个小可爱对上眼"
+      "你可能抽不到\"亲生的\"，但一定能收获一个\"娃\"。"
     ])
     
     if (name.includes("精油") || name.includes("香氛")) return pick([
-      "很柔和的香气…", 
-      "像晚安前的一口深呼吸…",
-      "会让房间有温度和边界"
+      "嗅觉ASMR，专治\"精神内耗\"。"
     ])
     
     if (name.includes("烧水杯") || name.includes("电热") || name.includes("热水")) return pick([
-      "掌心在升温…", 
-      "像把冬天调到常温+…",
-      "从此喝热水不再是口号"
+      "温度升高！"
     ])
     
     if (name.includes("水杯") || name.includes("冷水杯")) return pick([
-      "叮当一声的清透…", 
-      "把喝水这件小事做得很体面…",
-      "拿在手里就像握住一段设计感"
+      "温度升高！"
     ])
     
     if (name.includes("红酒") || name.includes("酒")) return pick([
-      "醇香在空气中慢慢散开…", 
-      "时光与葡萄的完美邂逅…",
-      "浪漫的夜晚值得被珍藏"
+      "来自南半球的\"液体宝石\"，适合\"吨吨吨\"也适合\"摇摇摇\"。"
     ])
     
     if (name.includes("面霜") || name.includes("La Mer") || name.includes("面部")) return pick([
-      "像海风一样的细腻…", 
-      "夜里修复，白天发光…",
-      "肌肤会给出一个很温柔的答案"
+      "好用、爱用"
     ])
     
     return pick(["我感知到一份贴心的小物…", "用起来不夸张，但离不开…"])

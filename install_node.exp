@@ -1,0 +1,16 @@
+#!/usr/bin/expect
+set timeout 60
+spawn ssh -o StrictHostKeyChecking=no root@106.14.32.99
+expect "password:"
+send "jQ5nyV\$GYquHC#YgC62U&p252sss\r"
+expect "# "
+send "curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -\r"
+expect "# "
+send "apt-get install -y nodejs\r"
+expect "# "
+send "node --version\r"
+expect "# "
+send "npm --version\r"
+expect "# "
+send "exit\r"
+expect eof

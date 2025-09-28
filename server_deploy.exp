@@ -1,0 +1,22 @@
+#!/usr/bin/expect
+set timeout 30
+spawn ssh -o StrictHostKeyChecking=no root@106.14.32.99
+expect "password:"
+send "jQ5nyV\$GYquHC#YgC62U&p252sss\r"
+expect "# "
+send "cd /root && ls -la wedding-golden-egg-game-deploy.tar.gz\r"
+expect "# "
+send "mkdir -p /var/www/wedding-game\r"
+expect "# "
+send "cd /var/www/wedding-game\r"
+expect "# "
+send "tar -xzf /root/wedding-golden-egg-game-deploy.tar.gz\r"
+expect "# "
+send "ls -la\r"
+expect "# "
+send "which node\r"
+expect "# "
+send "which npm\r"
+expect "# "
+send "exit\r"
+expect eof

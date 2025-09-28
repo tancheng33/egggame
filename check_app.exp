@@ -1,0 +1,14 @@
+#!/usr/bin/expect
+set timeout 60
+spawn ssh -o StrictHostKeyChecking=no root@106.14.32.99
+expect "password:"
+send "jQ5nyV\$GYquHC#YgC62U&p252sss\r"
+expect "# "
+send "pm2 list\r"
+expect "# "
+send "pm2 logs wedding-game --lines 20\r"
+expect "# "
+send "curl -I http://localhost:3000\r"
+expect "# "
+send "exit\r"
+expect eof

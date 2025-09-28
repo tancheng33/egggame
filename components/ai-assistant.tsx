@@ -17,18 +17,18 @@ interface AIAssistantProps {
 }
 
 const eggHints = [
-  { id: 1, hint: "这个金蛋里藏着能让你放松身心的传统好物～", emoji: "🔨" },
-  { id: 2, hint: "香醇的味道会唤醒你的清晨，来自蓝色的惊喜！", emoji: "☕" },
-  { id: 3, hint: "出门在外的好伙伴，永远不会让你的设备没电～", emoji: "🔋" },
-  { id: 4, hint: "可爱的小伙伴在等你，盲盒的魅力就在于未知！", emoji: "🎁" },
-  { id: 5, hint: "每天两次的健康习惯，德国品质值得信赖～", emoji: "🦷" },
-  { id: 6, hint: "来自法国的浪漫香气，紫色的梦幻体验！", emoji: "💜" },
-  { id: 7, hint: "英伦文化的精致体现，喝水也能很有艺术感～", emoji: "🏛️" },
-  { id: 8, hint: "随时随地享受热水，小巧便携的温暖陪伴！", emoji: "🔥" },
-  { id: 9, hint: "东方美学的香氛艺术，优雅气质的完美诠释～", emoji: "🌸" },
-  { id: 10, hint: "来自智利的醇香佳酿，浪漫品鉴时光！", emoji: "🍷" },
-  { id: 11, hint: "迪士尼的魔法加上传统工艺，已经绝版的珍贵收藏！", emoji: "✨" },
-  { id: 12, hint: "海洋的奢华秘密，让肌肤重获新生的传奇面霜！", emoji: "🌊" },
+  { id: 1, hint: "它不说话，但能让你发出\"啊~\"的声音。", emoji: "🔨" },
+  { id: 2, hint: "液体灵感，社畜燃料，DDL伴侣。", emoji: "☕" },
+  { id: 3, hint: "你可能抽不到\"亲生的\"，但一定能收获一个\"娃\"。", emoji: "🔋" },
+  { id: 4, hint: "你可能抽不到\"亲生的\"，但一定能收获一个\"娃\"。", emoji: "🎁" },
+  { id: 5, hint: "滋滋滋", emoji: "🦷" },
+  { id: 6, hint: "嗅觉ASMR，专治\"精神内耗\"。", emoji: "💜" },
+  { id: 7, hint: "美团现在要收你3块一小时", emoji: "🏛️" },
+  { id: 8, hint: "温度升高！", emoji: "🔥" },
+  { id: 9, hint: "一种\"闻得到的东方叙事\"，比文案还香。", emoji: "🌸" },
+  { id: 10, hint: "来自南半球的\"液体宝石\"，适合\"吨吨吨\"也适合\"摇摇摇\"。", emoji: "🍷" },
+  { id: 11, hint: "通往\"童话世界\"和\"发丝顺滑\"的传送门。", emoji: "✨" },
+  { id: 12, hint: "好用、爱用", emoji: "🌊" },
 ]
 
 export function AIAssistant({ selectedEggId, openedEggs, onHintRequest, isShaking = false, currentShakeHint, onSelectPerson, isSpinning = false, spinningTable, spinningPerson, selectedPerson }: AIAssistantProps) {
