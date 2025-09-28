@@ -1,0 +1,447 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Updated to Airbnb-inspired warm color palette */
+  --background: oklch(0.99 0.005 30); /* Warm white */
+  --foreground: oklch(0.15 0.02 30); /* Deep warm gray */
+  --card: oklch(1 0 0); /* Pure white cards */
+  --card-foreground: oklch(0.15 0.02 30);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.15 0.02 30);
+  --primary: oklch(0.55 0.2 15); /* Airbnb coral/pink */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.65 0.15 45); /* Warm golden accent */
+  --secondary-foreground: oklch(0.15 0.02 30);
+  --muted: oklch(0.96 0.01 30);
+  --muted-foreground: oklch(0.45 0.02 30);
+  --accent: oklch(0.7 0.25 60); /* Bright golden */
+  --accent-foreground: oklch(0.15 0.02 30);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.92 0.01 30);
+  --input: oklch(0.98 0.005 30);
+  --ring: oklch(0.55 0.2 15);
+  --chart-1: oklch(0.55 0.2 15);
+  --chart-2: oklch(0.65 0.15 45);
+  --chart-3: oklch(0.7 0.25 60);
+  --chart-4: oklch(0.35 0.1 200);
+  --chart-5: oklch(0.75 0.15 160);
+  --radius: 1rem; /* Increased border radius for Airbnb style */
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.15 0.02 30);
+  --sidebar-primary: oklch(0.96 0.01 30);
+  --sidebar-primary-foreground: oklch(0.15 0.02 30);
+  --sidebar-accent: oklch(0.55 0.2 15);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-border: oklch(0.92 0.01 30);
+  --sidebar-ring: oklch(0.55 0.2 15);
+}
+
+.dark {
+  --background: oklch(0.08 0.01 30);
+  --foreground: oklch(0.95 0.005 30);
+  --card: oklch(0.1 0.01 30);
+  --card-foreground: oklch(0.95 0.005 30);
+  --popover: oklch(0.1 0.01 30);
+  --popover-foreground: oklch(0.95 0.005 30);
+  --primary: oklch(0.7 0.2 15);
+  --primary-foreground: oklch(0.08 0.01 30);
+  --secondary: oklch(0.25 0.02 30);
+  --secondary-foreground: oklch(0.95 0.005 30);
+  --muted: oklch(0.15 0.01 30);
+  --muted-foreground: oklch(0.65 0.02 30);
+  --accent: oklch(0.25 0.02 30);
+  --accent-foreground: oklch(0.95 0.005 30);
+  --destructive: oklch(0.6 0.2 25);
+  --destructive-foreground: oklch(0.95 0.005 30);
+  --border: oklch(0.2 0.01 30);
+  --input: oklch(0.15 0.01 30);
+  --ring: oklch(0.7 0.2 15);
+  --chart-1: oklch(0.7 0.2 15);
+  --chart-2: oklch(0.75 0.15 45);
+  --chart-3: oklch(0.8 0.25 60);
+  --chart-4: oklch(0.6 0.1 200);
+  --chart-5: oklch(0.85 0.15 160);
+  --sidebar: oklch(0.1 0.01 30);
+  --sidebar-foreground: oklch(0.95 0.005 30);
+  --sidebar-primary: oklch(0.7 0.2 15);
+  --sidebar-primary-foreground: oklch(0.08 0.01 30);
+  --sidebar-accent: oklch(0.25 0.02 30);
+  --sidebar-accent-foreground: oklch(0.95 0.005 30);
+  --sidebar-border: oklch(0.2 0.01 30);
+  --sidebar-ring: oklch(0.7 0.2 15);
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+/* Enhanced animations with Stripe-like sophistication */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.02);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3), 0 0 40px rgba(255, 215, 0, 0.1), 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.5), 0 0 60px rgba(255, 215, 0, 0.2), 0 12px 48px rgba(0, 0, 0, 0.15);
+  }
+}
+
+@keyframes crack {
+  0% {
+    transform: scale(1) rotate(0deg);
+    filter: brightness(1);
+  }
+  25% {
+    transform: scale(1.05) rotate(-2deg);
+    filter: brightness(1.2);
+  }
+  50% {
+    transform: scale(1.1) rotate(2deg);
+    filter: brightness(1.4);
+  }
+  75% {
+    transform: scale(1.15) rotate(-1deg);
+    filter: brightness(1.6);
+  }
+  100% {
+    transform: scale(0) rotate(0deg);
+    filter: brightness(2);
+    opacity: 0;
+  }
+}
+
+@keyframes confetti {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-120vh) rotate(720deg) scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes prizeReveal {
+  0% {
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+    filter: blur(10px);
+  }
+  50% {
+    transform: scale(1.1) rotate(-90deg);
+    opacity: 0.8;
+    filter: blur(2px);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInScale {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Enhanced 3D animations and Airbnb-style effects */
+@keyframes float3d {
+  0%,
+  100% {
+    transform: translateY(0px) rotateX(0deg) rotateY(0deg) scale(1);
+  }
+  25% {
+    transform: translateY(-8px) rotateX(5deg) rotateY(-5deg) scale(1.02);
+  }
+  50% {
+    transform: translateY(-12px) rotateX(0deg) rotateY(5deg) scale(1.05);
+  }
+  75% {
+    transform: translateY(-8px) rotateX(-5deg) rotateY(-2deg) scale(1.02);
+  }
+}
+
+@keyframes bounce3d {
+  0%,
+  100% {
+    transform: translateY(0) scale(1) rotateX(0deg);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.1) rotateX(10deg);
+  }
+}
+
+@keyframes eggCrack3d {
+  0% {
+    transform: scale(1) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    filter: brightness(1);
+  }
+  20% {
+    transform: scale(1.05) rotateX(5deg) rotateY(-5deg) rotateZ(2deg);
+    filter: brightness(1.2);
+  }
+  40% {
+    transform: scale(1.1) rotateX(-5deg) rotateY(5deg) rotateZ(-2deg);
+    filter: brightness(1.4);
+  }
+  60% {
+    transform: scale(1.15) rotateX(10deg) rotateY(-10deg) rotateZ(5deg);
+    filter: brightness(1.6);
+  }
+  80% {
+    transform: scale(1.2) rotateX(-15deg) rotateY(15deg) rotateZ(-10deg);
+    filter: brightness(1.8);
+  }
+  100% {
+    transform: scale(0) rotateX(180deg) rotateY(360deg) rotateZ(720deg);
+    filter: brightness(2);
+    opacity: 0;
+  }
+}
+
+@keyframes assistantPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 92, 95, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(255, 92, 95, 0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px) translateY(-2px) rotate(-1deg);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px) translateY(2px) rotate(1deg);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.float-animation {
+  animation: float 4s ease-in-out infinite;
+}
+
+.shimmer-animation {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+.glow-animation {
+  animation: glow 3s ease-in-out infinite;
+}
+
+.crack-animation {
+  animation: crack 1s ease-out forwards;
+}
+
+.confetti-animation {
+  animation: confetti 4s ease-out forwards;
+}
+
+.prize-reveal-animation {
+  animation: prizeReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.slide-up-animation {
+  animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.fade-in-scale-animation {
+  animation: fadeInScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.float3d-animation {
+  animation: float3d 6s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+.bounce3d-animation {
+  animation: bounce3d 2s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+.egg-crack3d-animation {
+  animation: eggCrack3d 1.2s ease-out forwards;
+  transform-style: preserve-3d;
+}
+
+.assistant-pulse-animation {
+  animation: assistantPulse 2s ease-in-out infinite;
+}
+
+.shake-animation {
+  animation: shake 0.3s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Added sophisticated gradient utilities */
+.gradient-primary {
+  background: linear-gradient(135deg, oklch(0.55 0.2 15) 0%, oklch(0.65 0.15 45) 50%, oklch(0.7 0.25 60) 100%);
+}
+
+.gradient-card {
+  background: linear-gradient(135deg, oklch(1 0 0) 0%, oklch(0.99 0.005 30) 100%);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, oklch(0.55 0.2 15) 0%, oklch(0.65 0.15 45) 50%, oklch(0.7 0.25 60) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Added 3D perspective utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* 老虎机动画效果 */
+@keyframes slide-right {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes spin-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bounce-fast {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-slide-right {
+  animation: slide-right 1s linear infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 0.5s linear infinite;
+}
+
+.animate-bounce-fast {
+  animation: bounce-fast 0.3s ease-in-out infinite;
+}

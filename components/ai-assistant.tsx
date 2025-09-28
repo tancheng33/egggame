@@ -1,0 +1,269 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { cn } from "@/lib/utils"
+
+interface AIAssistantProps {
+  selectedEggId: number | null
+  openedEggs: number[]
+  onHintRequest: (eggId: number) => void
+  isShaking?: boolean
+  currentShakeHint?: string
+  onSelectPerson?: () => void
+  isSpinning?: boolean
+  spinningTable?: number | null
+  spinningPerson?: string | null
+  selectedPerson?: {table: number, person: string} | null
+}
+
+const eggHints = [
+  { id: 1, hint: "这个金蛋里藏着能让你放松身心的传统好物～", emoji: "🔨" },
+  { id: 2, hint: "香醇的味道会唤醒你的清晨，来自蓝色的惊喜！", emoji: "☕" },
+  { id: 3, hint: "出门在外的好伙伴，永远不会让你的设备没电～", emoji: "🔋" },
+  { id: 4, hint: "可爱的小伙伴在等你，盲盒的魅力就在于未知！", emoji: "🎁" },
+  { id: 5, hint: "每天两次的健康习惯，德国品质值得信赖～", emoji: "🦷" },
+  { id: 6, hint: "来自法国的浪漫香气，紫色的梦幻体验！", emoji: "💜" },
+  { id: 7, hint: "英伦文化的精致体现，喝水也能很有艺术感～", emoji: "🏛️" },
+  { id: 8, hint: "随时随地享受热水，小巧便携的温暖陪伴！", emoji: "🔥" },
+  { id: 9, hint: "东方美学的香氛艺术，优雅气质的完美诠释～", emoji: "🌸" },
+  { id: 10, hint: "厨房里的艺术品，让烹饪变成一种享受！", emoji: "👨‍🍳" },
+  { id: 11, hint: "迪士尼的魔法加上传统工艺，已经绝版的珍贵收藏！", emoji: "✨" },
+  { id: 12, hint: "海洋的奢华秘密，让肌肤重获新生的传奇面霜！", emoji: "🌊" },
+]
+
+export function AIAssistant({ selectedEggId, openedEggs, onHintRequest, isShaking = false, currentShakeHint, onSelectPerson, isSpinning = false, spinningTable, spinningPerson, selectedPerson }: AIAssistantProps) {
+  const [currentMessage, setCurrentMessage] = useState<string>("")
+  const [robotExpression, setRobotExpression] = useState<'idle' | 'thinking' | 'excited' | 'shaking'>('idle')
+
+  const getRandomEncouragement = () => {
+    const encouragements = [
+      "你好！我是你的AI小助手 ✨ 我能感知到每个金蛋的神秘能量，需要我的建议吗？",
+      "欢迎来到神奇的金蛋世界！我已经准备好为你提供智能提示了～",
+      "我的AI直觉告诉我，今天对你来说是个特别幸运的日子！",
+      "每个金蛋都散发着独特的光芒，让我帮你找到最适合的那一个吧！",
+      "我正在分析这些金蛋的能量场...有什么我可以帮助你的吗？",
+    ]
+    return encouragements[Math.floor(Math.random() * encouragements.length)]
+  }
+
+  const getSmartSuggestion = () => {
+    const unopenedEggs = Array.from({ length: 12 }, (_, i) => i + 1).filter((id) => !openedEggs.includes(id))
+
+    if (unopenedEggs.length === 0) {
+      return "恭喜你！所有的金蛋都被你发现了！每一个都是完美的选择 🎉"
+    }
+
+    const suggestions = [
+      `我的AI算法建议你试试第${unopenedEggs[Math.floor(Math.random() * unopenedEggs.length)]}号金蛋，它的能量波动很特别！`,
+      `根据你之前的选择模式，我推荐你考虑一下那些还在闪闪发光的金蛋～`,
+      `我感觉到有几个金蛋特别想被你发现，要不要听听我的直觉？`,
+      `基于概率分析，现在是开启新金蛋的最佳时机！`,
+      `我的传感器检测到某些金蛋的惊喜指数特别高哦！`,
+    ]
+
+    return suggestions[Math.floor(Math.random() * suggestions.length)]
+  }
+
+  const getSpecificHint = () => {
+    const unopenedEggs = Array.from({ length: 12 }, (_, i) => i + 1).filter((id) => !openedEggs.includes(id))
+
+    if (unopenedEggs.length === 0) return "所有金蛋都已经被发现了！"
+
+    const randomEgg = unopenedEggs[Math.floor(Math.random() * unopenedEggs.length)]
+    const hint = eggHints.find((h) => h.id === randomEgg)
+
+    return `${hint?.emoji} 第${randomEgg}号金蛋的秘密：${hint?.hint}`
+  }
+
+
+  // 监听摇动状态变化
+  useEffect(() => {
+    if (isShaking) {
+      setRobotExpression('shaking')
+      setCurrentMessage("正在感知金蛋的神秘能量... 🔮")
+    } else if (currentShakeHint) {
+      setRobotExpression('excited')
+      setCurrentMessage(currentShakeHint)
+      
+      // 3秒后恢复空闲状态
+      setTimeout(() => {
+        setRobotExpression('idle')
+        setCurrentMessage(getRandomEncouragement())
+      }, 3000)
+    }
+  }, [isShaking, currentShakeHint])
+
+  useEffect(() => {
+    if (!isShaking && !currentShakeHint) {
+      setCurrentMessage(getRandomEncouragement())
+      setRobotExpression('idle')
+    }
+  }, [isShaking, currentShakeHint])
+
+  // 机器人GIF组件
+  const RobotGif = () => {
+    // 通过添加时间戳强制重新加载gif来触发动画
+    const [gifKey, setGifKey] = useState(Date.now())
+    
+    // 当机器人状态改变时重新加载gif (摇一摇时不重新加载)
+    useEffect(() => {
+      if (robotExpression === 'excited' || robotExpression === 'thinking') {
+        setGifKey(Date.now())
+      }
+    }, [robotExpression])
+    
+    return (
+      <div className={cn(
+        "relative w-80 h-80 rounded-3xl overflow-hidden transform transition-all duration-300",
+        robotExpression === 'excited' && "scale-110",
+        robotExpression === 'thinking' && "animate-pulse"
+      )}>
+        {/* 机器人GIF */}
+        <img 
+          key={gifKey}
+          src={`/bot.gif?t=${gifKey}`}
+          alt="AI Robot Assistant"
+          className={cn(
+            "w-full h-full object-cover rounded-3xl transition-all duration-300",
+            robotExpression === 'excited' && "brightness-110",
+            robotExpression === 'thinking' && "brightness-105",
+            robotExpression === 'idle' && "brightness-90"
+          )}
+          draggable={false}
+          loading="eager"
+        />
+        
+        {/* 状态光环效果已移除 */}
+      </div>
+    )
+  }
+
+  return (
+    <>
+      {/* 机器人本体 - 固定在右下角 */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <div className="transform transition-all duration-300">
+          <RobotGif />
+        </div>
+        
+        {/* 抽奖按钮 - 在机器人下方 */}
+        {onSelectPerson && (
+          <div className="mt-4 flex justify-center">
+            <button
+              onClick={onSelectPerson}
+              disabled={isSpinning}
+              className={cn(
+                "px-8 py-4 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white font-bold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden",
+                isSpinning && "animate-pulse"
+              )}
+            >
+              {/* 按钮内部光效 */}
+              {isSpinning && (
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-slide-right"></div>
+              )}
+              
+              <span className="relative z-10 flex items-center gap-2">
+                {isSpinning ? (
+                  <>
+                    <span className="animate-spin">🎰</span>
+                    <span>抽奖中...</span>
+                    <span className="animate-spin">🎰</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="animate-bounce">🎯</span>
+                    <span>AI随机选人</span>
+                    <span className="animate-bounce">🎯</span>
+                  </>
+                )}
+              </span>
+            </button>
+          </div>
+        )}
+        
+        {/* 老虎机效果显示 */}
+        {(isSpinning || selectedPerson) && (
+          <div className="mt-4 bg-gradient-to-br from-yellow-400/20 via-orange-500/20 to-red-500/20 backdrop-blur-sm border-2 border-yellow-400/50 rounded-2xl p-4 shadow-2xl max-w-xs relative overflow-hidden">
+            {/* 跑马灯背景效果 */}
+            {isSpinning && (
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-300/30 to-transparent animate-slide-right"></div>
+            )}
+            
+            {/* 闪烁边框效果 */}
+            {isSpinning && (
+              <div className="absolute inset-0 rounded-2xl border-2 border-yellow-400 animate-ping"></div>
+            )}
+            
+            <div className="text-center relative z-10">
+              <div className="text-lg font-bold text-yellow-700 mb-2 flex items-center justify-center gap-2">
+                {isSpinning ? (
+                  <>
+                    <span className="animate-bounce">🎰</span>
+                    <span className="animate-pulse">抽奖中...</span>
+                    <span className="animate-bounce">🎰</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="animate-bounce">🎉</span>
+                    <span>恭喜中奖！</span>
+                    <span className="animate-bounce">🎉</span>
+                  </>
+                )}
+              </div>
+              
+              {/* 桌号显示 - 老虎机风格 */}
+              <div className="mb-4">
+                <div className="text-sm text-gray-600 mb-2 font-semibold">桌号</div>
+                <div className={cn(
+                  "text-3xl font-black text-primary bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent",
+                  isSpinning && spinningTable && "animate-pulse"
+                )}>
+                  {spinningTable || selectedPerson?.table || "---"}
+                </div>
+              </div>
+              
+              {/* 人员显示 - 老虎机风格 */}
+              <div>
+                <div className="text-sm text-gray-600 mb-2 font-semibold">人员</div>
+                <div className={cn(
+                  "text-xl font-bold text-secondary bg-gradient-to-r from-green-500 to-blue-600 bg-clip-text text-transparent truncate",
+                  isSpinning && spinningPerson && "animate-pulse"
+                )}>
+                  {spinningPerson || selectedPerson?.person || "---"}
+                </div>
+              </div>
+              
+              {/* 装饰性元素 */}
+              {isSpinning && (
+                <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full animate-ping"></div>
+              )}
+              {isSpinning && (
+                <div className="absolute -bottom-2 -left-2 w-4 h-4 bg-orange-400 rounded-full animate-ping" style={{animationDelay: '0.5s'}}></div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 机器人提示气泡 - 在机器人上方，保持合理距离 */}
+      {(isShaking || currentShakeHint || robotExpression !== 'idle') && (
+        <div className="fixed bottom-[35rem] right-6 z-50">
+          <div className={cn(
+            "bg-white/95 backdrop-blur-sm border border-blue-200/50 rounded-3xl p-6 shadow-xl max-w-sm",
+            "transform transition-all duration-300 animate-fade-in",
+            isShaking && "animate-pulse"
+          )}>
+            <div className="text-base text-blue-700 font-medium leading-relaxed">
+              {currentMessage}
+            </div>
+            <div className="text-sm text-blue-500/70 mt-2">
+              AI机器人助手 🤖
+            </div>
+            {/* 气泡箭头指向下方机器人 */}
+            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 rotate-45 w-4 h-4 bg-white border-r border-b border-blue-200/50"></div>
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
