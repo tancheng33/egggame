@@ -155,24 +155,6 @@ export function GoldenEgg({ id, isOpened, onClick, onShake, onShakeStart, onShak
             <span className="text-sm text-muted-foreground font-medium">✨ 已开启</span>
           </div>
         )}
-
-        {/* 摇一摇按钮 */}
-        {!isOpened && (
-          <Button
-            onClick={handleShake}
-            disabled={isShaking}
-            size="sm"
-            variant="outline"
-            className={cn(
-              "h-8 px-3 text-xs bg-gradient-to-r from-orange-50 to-pink-50 border-orange-200/50 text-orange-600 hover:from-orange-100 hover:to-pink-100 hover:border-orange-300 transition-all duration-300 transform hover:scale-105",
-              isShaking && "animate-bounce scale-105"
-            )}
-          >
-            <Smartphone className="w-3 h-3 mr-1" />
-            {isShaking ? "摇动中..." : "摇一摇"}
-          </Button>
-        )}
-
       </div>
     </div>
   )

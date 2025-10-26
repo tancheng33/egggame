@@ -6,20 +6,28 @@ import { GoldenEgg } from "@/components/golden-egg"
 import { PrizeModal } from "@/components/prize-modal"
 import { Confetti } from "@/components/confetti"
 import { AIAssistant } from "@/components/ai-assistant"
+import { GrandPrizeSlot } from "@/components/grand-prize-slot"
+import { cn } from "@/lib/utils"
 
 const prizes = [
-  { id: 1, name: "百福养生锤", price: "¥80", description: "传统养生工具，促进血液循环" },
-  { id: 2, name: "蓝瓶咖啡豆", price: "¥138", description: "精选优质咖啡豆，香醇浓郁" },
-  { id: 3, name: "充电宝", price: "¥165", description: "大容量移动电源，出行必备" },
-  { id: 4, name: "Labubu 三代盲盒", price: "¥125", description: "热门收藏玩具，惊喜满满" },
-  { id: 5, name: "Oral-B 电动牙刷", price: "¥180", description: "专业口腔护理，健康生活" },
-  { id: 6, name: "法国薰衣草精油", price: "¥180", description: "天然芳香精油，舒缓身心" },
-  { id: 7, name: "翡翠手串", price: "¥200", description: "温润含蓄的东方之美，佩戴吉祥" },
-  { id: 8, name: "摩飞烧水杯", price: "¥200", description: "便携电热水杯，随时享受热水" },
-  { id: 9, name: "观夏香氛礼盒", price: "¥300", description: "东方香调香氛，优雅气质" },
-  { id: 10, name: "智利红酒礼盒", price: "¥600", description: "精选智利红酒，浪漫品鉴" },
-  { id: 11, name: "谭木匠迪士尼联名气垫梳", price: "¥600", description: "限量版收藏" },
-  { id: 12, name: "La Mer 经典面霜", price: "¥1500", description: "奢华护肤品，肌肤新生" },
+  { id: 1, name: "小米加湿器", price: "¥199", description: "智能加湿，健康生活" },
+  { id: 2, name: "SKG护颈枕", price: "¥299", description: "呵护颈椎，舒适按摩" },
+  { id: 3, name: "小米剃须刀", price: "¥169", description: "精准剃须，清爽干净" },
+  { id: 4, name: "美的空气炸锅", price: "¥399", description: "健康烹饪，美味无油" },
+  { id: 5, name: "小米香氛机", price: "¥139", description: "香氛扩散，优雅生活" },
+  { id: 6, name: "小米音箱", price: "¥299", description: "智能语音，品质音质" },
+  { id: 7, name: "美的榨汁机", price: "¥259", description: "新鲜果汁，营养健康" },
+  { id: 8, name: "美的除螨吸尘器", price: "¥499", description: "深层清洁，除螨杀菌" },
+  { id: 9, name: "绿联充电宝", price: "¥199", description: "大容量快充，续航无忧" },
+  { id: 10, name: "Usmile电动牙刷", price: "¥299", description: "专业口腔护理，洁白牙齿" },
+  { id: 11, name: "美的破壁机", price: "¥599", description: "破壁料理，营养丰富" },
+  { id: 12, name: "美的挂烫机", price: "¥399", description: "快速熨烫，平整如新" },
+  { id: 13, name: "美的电蒸锅", price: "¥299", description: "蒸汽烹饪，营养保留" },
+  { id: 14, name: "小米吹风机", price: "¥199", description: "护发速干，造型轻松" },
+  { id: 15, name: "乐高-富贵竹", price: "¥399", description: "创意拼搭，装饰家居" },
+  { id: 16, name: "美的电饭煲", price: "¥499", description: "智能烹饪，粒粒香甜" },
+  { id: 17, name: "小米体脂秤", price: "¥149", description: "精准测量，健康管理" },
+  { id: 18, name: "美的电火锅", price: "¥359", description: "多功能烹饪，美味火锅" },
 ]
 
 export default function WeddingGoldenEggGame() {
@@ -27,191 +35,138 @@ export default function WeddingGoldenEggGame() {
   const [selectedPrize, setSelectedPrize] = useState<(typeof prizes)[0] | null>(null)
   const [showConfetti, setShowConfetti] = useState(false)
   const [availablePrizes, setAvailablePrizes] = useState([...prizes])
-  const [selectedEggId, setSelectedEggId] = useState<number | null>(null)
-  const [shakeHints, setShakeHints] = useState<{[key: number]: string}>({})
-  const [isAnyEggShaking, setIsAnyEggShaking] = useState(false)
-  const [currentRobotHint, setCurrentRobotHint] = useState<string>("")
   const [eggPrizes, setEggPrizes] = useState<Record<number, (typeof prizes)[0]>>({})
-  const [selectedPerson, setSelectedPerson] = useState<{table: number, person: string} | null>(null)
+  const [selectedNumber, setSelectedNumber] = useState<string | null>(null)
+  const [selectedNumbers, setSelectedNumbers] = useState<string[]>([]) // 存储多个中奖号码
   const [isSpinning, setIsSpinning] = useState(false)
-  const [spinningTable, setSpinningTable] = useState<number | null>(null)
-  const [spinningPerson, setSpinningPerson] = useState<string | null>(null)
-  const [winningTables, setWinningTables] = useState<Set<number>>(new Set())
+  const [spinningNumber, setSpinningNumber] = useState<string | null>(null)
+  const [spinningSlots, setSpinningSlots] = useState<string[]>([]) // 每个槽位正在滚动的数字
+  const [revealedNumbers, setRevealedNumbers] = useState<string[]>([]) // 已经揭晓的数字
+  const [drawnNumbers, setDrawnNumbers] = useState<Set<string>>(new Set())
+  const [numberRange, setNumberRange] = useState({ min: 1, max: 999 })
+  const [inputValue, setInputValue] = useState("999") // 用于输入框的临时值
+  const [prizeCount, setPrizeCount] = useState(1) // 一轮抽几个奖品
+  const [prizeCountInput, setPrizeCountInput] = useState("1") // 奖品数量输入框临时值
+  const [showGrandPrize, setShowGrandPrize] = useState(false) // 显示大奖抽奖
+  const [grandPrizeNumber, setGrandPrizeNumber] = useState<string>("") // 中奖号码
+  const [grandPrizeDrawn, setGrandPrizeDrawn] = useState(false) // 大奖是否已抽过
   const [assignedPrizes] = useState<Record<number, (typeof prizes)[0]>>(() => {
     const shuffled = [...prizes].sort(() => Math.random() - 0.5)
     const map: Record<number, (typeof prizes)[0]> = {}
-    for (let i = 1; i <= 12; i++) {
+    for (let i = 1; i <= 18; i++) {
       map[i] = shuffled[i - 1]
     }
     return map
   })
 
-  // 宾客桌位数据
-  const guestTables = {
-    1: ["王依婷", "谭成", "龚逸菲", "郑若男", "毛若晨", "肖力恒", "俞志巍", "王诗琪", "周昕怡", "陆思楠"],
-    2: ["王玥", "王秉泽", "顾雨晨", "周澍", "郁钧豪", "邹智瑜", "地图侠夫妇", "海宝宝夫妇"],
-    3: ["肖华夫妇", "余海红", "单颎夫妇", "陈淑霞", "王炳华", "蒋建明", "谭星夫妇"],
-    5: ["王知夫妇", "陈嘉君", "袁曦皓夫妇", "应琪超夫妇", "刘昌力夫妇", "华云坤"],
-    6: ["寿祖才夫妇", "寿永丽全家", "寿永强全家", "闻庆梅", "寿永"],
-    7: ["凌光明夫妇", "凌小明夫妇", "凌伟东全家", "凌伟华全家"],
-    8: ["徐卫夫妇", "诸晶", "寿天齐", "谭坚夫妇", "谭智颖全家", "顾建妹夫妇"],
-    9: ["顾建伟夫妇", "顾旭全家", "徐文婷全家", "凌小芳", "凌美秀"],
-    10: ["戴忠义夫妇", "李群夫妇", "李宏刚夫妇", "朱德方夫妇", "孙林生夫妇", "谭明"],
-    11: ["肖勇夫妇", "胡建强夫妇", "曹淳夫妇", "淤维萍夫妇", "徐卫夫妇"],
-    12: ["倪心迪", "雷博宇", "陈楚", "张理艳", "欧理文", "张文殊", "严天立", "李易全家"],
-    15: ["林黎全家", "徐敏磊夫妇", "耿燕夫妇", "张海生夫妇", "王华"],
-    16: ["朱振勇全家", "薛天鹤全家", "郑允泰夫妇"],
-    17: ["王顺林夫妇", "王芳全家", "朱玲娣", "薛天明夫妇"],
-    18: ["吴冬立", "陈永心夫妇", "沈洪波夫妇", "刘招川", "魏璟", "刘英勇", "王富顺", "卢磊"],
-    19: ["陆红萍全家", "徐月萍全家", "蒋佩珍夫妇"],
-    20: ["傅伊浩全家", "陆奕奕", "许亮", "徐可", "张政", "仲维华夫妇"],
-    21: ["毛剑锋全家", "张军父女", "沈军全家", "兰燕", "郑颖"],
-    22: ["刘俊美全家", "王雅瑾全家", "卫顾斌全家", "刘俊皓"]
-  }
-
-  // 解析人数，根据关键词推断人数
-  const parsePersonCount = (personName: string): number => {
-    if (personName.includes("全家")) return 3 // 全家默认3人
-    if (personName.includes("夫妇")) return 2 // 夫妇默认2人
-    if (personName.includes("父女")) return 2 // 父女默认2人
-    return 1 // 单人
-  }
-
-  // 构建加权人员列表（排除已中奖桌号）
-  const buildWeightedGuestList = () => {
-    const weightedList: {table: number, person: string, weight: number}[] = []
-    Object.entries(guestTables).forEach(([table, guests]) => {
-      const tableNumber = parseInt(table)
-      // 跳过已中奖的桌号
-      if (winningTables.has(tableNumber)) {
-        return
+  // 生成可用数字列表（排除含4的数字）
+  const generateAvailableNumbers = (min: number, max: number): string[] => {
+    const numbers: string[] = []
+    for (let i = min; i <= max; i++) {
+      const numStr = i.toString().padStart(3, '0')
+      // 跳过包含数字4的
+      if (!numStr.includes('4')) {
+        numbers.push(numStr)
       }
-      guests.forEach(guest => {
-        let weight = parsePersonCount(guest)
-        // 20桌的中奖概率调高3倍
-        if (tableNumber === 20) {
-          weight *= 3
-        }
-        // 陆奕奕、许亮的权重再高3倍
-        if (guest === "陆奕奕" || guest === "许亮") {
-          weight *= 3
-        }
-        weightedList.push({ table: tableNumber, person: guest, weight })
-      })
-    })
-    return weightedList
+    }
+    return numbers
   }
 
-  const handleSelectPerson = () => {
+  // 获取未抽中的数字列表
+  const getAvailableNumbers = (): string[] => {
+    const allNumbers = generateAvailableNumbers(numberRange.min, numberRange.max)
+    return allNumbers.filter(num => !drawnNumbers.has(num))
+  }
+
+  const handleSelectNumber = () => {
     if (isSpinning) return
     
     setIsSpinning(true)
-    setSelectedPerson(null)
-    setSpinningTable(null)
-    setSpinningPerson(null)
+    setSelectedNumber(null)
+    setSelectedNumbers([])
+    setRevealedNumbers([])
+    setSpinningSlots([])
+    setSpinningNumber(null)
 
-    // 先根据权重选择最终结果（排除已中奖桌号）
-    const finalWeightedList = buildWeightedGuestList()
+    // 获取可用数字列表
+    const availableNumbers = getAvailableNumbers()
     
-    // 检查是否还有可抽奖的桌号
-    if (finalWeightedList.length === 0) {
+    // 检查是否还有可抽的数字
+    if (availableNumbers.length === 0) {
       setIsSpinning(false)
-      alert("所有桌号都已中奖！")
+      alert("所有数字都已抽完！")
       return
     }
     
-    const totalWeight = finalWeightedList.reduce((sum, item) => sum + item.weight, 0)
-    let random = Math.random() * totalWeight
+    // 确定本次实际抽取的数量
+    const actualCount = Math.min(prizeCount, availableNumbers.length)
     
-    let selectedItem = finalWeightedList[0]
-    for (const item of finalWeightedList) {
-      random -= item.weight
-      if (random <= 0) {
-        selectedItem = item
-        break
-      }
+    // 随机选择多个不重复的数字
+    const selectedNums: string[] = []
+    const tempAvailable = [...availableNumbers]
+    for (let i = 0; i < actualCount; i++) {
+      const randomIndex = Math.floor(Math.random() * tempAvailable.length)
+      selectedNums.push(tempAvailable[randomIndex])
+      tempAvailable.splice(randomIndex, 1)
     }
 
-    // 老虎机效果：先显示桌号（只显示未中奖的桌号）
-    const availableTableNumbers = Object.keys(guestTables).map(Number).filter(table => !winningTables.has(table))
-    const tableInterval = setInterval(() => {
-      setSpinningTable(availableTableNumbers[Math.floor(Math.random() * availableTableNumbers.length)])
-    }, 100)
+    // 初始化所有槽位为滚动状态
+    setSpinningSlots(new Array(actualCount).fill('---'))
 
-    // 1.5秒后停止桌号滚动，显示正确的桌号
-    setTimeout(() => {
-      clearInterval(tableInterval)
-      setSpinningTable(selectedItem.table)
-      
-      // 人员滚动效果 - 只从选中桌号的人员中滚动
-      const tableGuests = guestTables[selectedItem.table as keyof typeof guestTables]
-      const personInterval = setInterval(() => {
-        const randomPerson = tableGuests[Math.floor(Math.random() * tableGuests.length)]
-        setSpinningPerson(randomPerson)
+    // 为每个槽位创建滚动动画
+    const intervals: NodeJS.Timeout[] = []
+    
+    // 每个槽位的滚动动画
+    for (let i = 0; i < actualCount; i++) {
+      const interval = setInterval(() => {
+        const randomNum = availableNumbers[Math.floor(Math.random() * availableNumbers.length)]
+        setSpinningSlots(prev => {
+          const newSlots = [...prev]
+          newSlots[i] = randomNum
+          return newSlots
+        })
       }, 80)
+      intervals.push(interval)
+    }
 
-      // 2秒后停止人员滚动，显示最终结果
+    // 逐个停止槽位并揭晓数字
+    selectedNums.forEach((num, index) => {
       setTimeout(() => {
-        clearInterval(personInterval)
-        setSpinningPerson(selectedItem.person)
-        setSelectedPerson({ table: selectedItem.table, person: selectedItem.person })
-        // 将中奖桌号添加到已中奖列表
-        setWinningTables(prev => new Set([...prev, selectedItem.table]))
-        setIsSpinning(false)
-      }, 2000)
-    }, 1500)
+        // 停止当前槽位的滚动
+        clearInterval(intervals[index])
+        
+        // 揭晓当前数字
+        setRevealedNumbers(prev => [...prev, num])
+        
+        // 如果是最后一个数字
+        if (index === actualCount - 1) {
+          // 清除所有间隔
+          intervals.forEach(interval => clearInterval(interval))
+          
+          // 等待一小段时间后完成抽奖
+          setTimeout(() => {
+            setSelectedNumbers(selectedNums)
+            setDrawnNumbers(prev => new Set([...prev, ...selectedNums]))
+            setIsSpinning(false)
+            setSpinningSlots([])
+          }, 500)
+        }
+      }, 1500 + index * 800) // 每个数字间隔800ms揭晓
+    })
   }
 
-  const getHintForPrize = (name: string): string => {
-    const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)]
-    
-    if (!name) return pick(["这颗蛋有点特别…", "我感觉到一份贴心的小物…"])
-    
-    if (name.includes("百福") || name.includes("养生锤") || name.includes("锤")) return pick([
-      "它不说话，但能让你发出\"啊~\"的声音。"
-    ])
-    
-    if (name.includes("咖啡")) return pick([
-      "液体灵感，社畜燃料，DDL伴侣。"
-    ])
-    
-    if (name.includes("手串") || name.includes("翡翠")) return pick([
-      "美团现在要收你3块一小时"
-    ])
-    
-    if (name.includes("电动牙刷") || name.includes("牙刷")) return pick([
-      "滋滋滋"
-    ])
-    
-    if (name.includes("充电宝")) return pick([
-      "你可能抽不到\"亲生的\"，但一定能收获一个\"娃\"。"
-    ])
-    
-    if (name.includes("盲盒")) return pick([
-      "你可能抽不到\"亲生的\"，但一定能收获一个\"娃\"。"
-    ])
-    
-    if (name.includes("精油") || name.includes("香氛")) return pick([
-      "嗅觉ASMR，专治\"精神内耗\"。"
-    ])
-    
-    if (name.includes("烧水杯") || name.includes("电热") || name.includes("热水")) return pick([
-      "温度升高！"
-    ])
-    
-    if (name.includes("水杯") || name.includes("冷水杯")) return pick([
-      "温度升高！"
-    ])
-    
-    if (name.includes("红酒") || name.includes("酒")) return pick([
-      "来自南半球的\"液体宝石\"，适合\"吨吨吨\"也适合\"摇摇摇\"。"
-    ])
-    
-    if (name.includes("面霜") || name.includes("La Mer") || name.includes("面部")) return pick([
-      "好用、爱用"
-    ])
-    
-    return pick(["我感知到一份贴心的小物…", "用起来不夸张，但离不开…"])
+  const handleClearNumbers = () => {
+    setSelectedNumbers([])
+    setSelectedNumber(null)
+    setRevealedNumbers([])
+    setSpinningSlots([])
+  }
+
+  const handleGrandPrizeComplete = (winningNumber: string) => {
+    setGrandPrizeNumber(winningNumber)
+    setGrandPrizeDrawn(true)
+    setShowConfetti(true)
+    setTimeout(() => setShowConfetti(false), 5000)
   }
 
   const handleEggClick = (eggId: number) => {
@@ -233,39 +188,23 @@ export default function WeddingGoldenEggGame() {
     setTimeout(() => setShowConfetti(false), 3000)
   }
 
-  const handleHintRequest = (eggId: number) => {
-    setSelectedEggId(eggId)
-  }
-
-  const handleShake = (eggId: number, _incomingHint: string) => {
-    const prize = assignedPrizes[eggId]
-    const hint = getHintForPrize(prize?.name || "")
-    setSelectedEggId(eggId)
-    setCurrentRobotHint(hint)
-    setShakeHints(prev => ({ ...prev, [eggId]: hint }))
-  }
-
-  const handleShakeStart = (eggId: number) => {
-    setIsAnyEggShaking(true)
-    setCurrentRobotHint("")
-  }
-
-  const handleShakeEnd = (eggId: number) => {
-    setIsAnyEggShaking(false)
-  }
-
   const resetGame = () => {
     setOpenedEggs([])
     setSelectedPrize(null)
     setShowConfetti(false)
     setAvailablePrizes([...prizes])
-    setSelectedEggId(null)
-    setShakeHints({})
-    setIsAnyEggShaking(false)
-    setCurrentRobotHint("")
     setEggPrizes({})
-    setSelectedPerson(null)
-    setWinningTables(new Set())
+    setSelectedNumber(null)
+    setSelectedNumbers([])
+    setRevealedNumbers([])
+    setSpinningSlots([])
+    setDrawnNumbers(new Set())
+    setInputValue("999")
+    setNumberRange({ min: 1, max: 999 })
+    setPrizeCount(1)
+    setPrizeCountInput("1")
+    setGrandPrizeNumber("")
+    setGrandPrizeDrawn(false)
   }
 
   return (
@@ -302,22 +241,164 @@ export default function WeddingGoldenEggGame() {
               </div>
             </div>
 
+            {/* 号码范围设置 */}
+            <div className="flex items-center justify-center gap-4 mt-8 flex-wrap">
+              <div className="bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 backdrop-blur-sm border-2 border-blue-400/30 rounded-2xl px-8 py-4 shadow-xl">
+                <div className="flex items-center gap-4">
+                  <label htmlFor="maxNumber" className="text-base font-semibold text-foreground/90 whitespace-nowrap">
+                    抽奖号码范围：
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg font-bold text-blue-600">001</span>
+                    <span className="text-lg text-muted-foreground">-</span>
+                    <input
+                      id="maxNumber"
+                      type="number"
+                      min="10"
+                      max="9999"
+                      value={inputValue}
+                      onChange={(e) => {
+                        const value = e.target.value
+                        setInputValue(value) // 允许任意输入
+                        
+                        // 实时更新numberRange（如果是有效数字）
+                        const numValue = parseInt(value)
+                        if (!isNaN(numValue) && numValue >= 10) {
+                          setNumberRange({ min: 1, max: Math.min(numValue, 9999) })
+                        }
+                      }}
+                      onBlur={(e) => {
+                        // 失去焦点时验证并修正
+                        const value = e.target.value
+                        const numValue = parseInt(value)
+                        
+                        if (value === '' || isNaN(numValue) || numValue < 10) {
+                          // 无效值，恢复默认
+                          setInputValue("999")
+                          setNumberRange({ min: 1, max: 999 })
+                        } else {
+                          // 有效值，确保在范围内
+                          const validValue = Math.min(Math.max(numValue, 10), 9999)
+                          setInputValue(validValue.toString())
+                          setNumberRange({ min: 1, max: validValue })
+                        }
+                      }}
+                      className="w-24 px-4 py-2 text-lg font-bold text-center bg-white/90 border-2 border-blue-400/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    />
+                  </div>
+                </div>
+                <div className="mt-2 text-xs text-center text-muted-foreground/60">
+                  可用号码数：<span className="font-bold text-blue-600">{getAvailableNumbers().length}</span> 个
+                  {drawnNumbers.size > 0 && (
+                    <span className="ml-2">
+                      | 已抽：<span className="font-bold text-orange-600">{drawnNumbers.size}</span> 个
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* 一轮抽几个奖品设置 */}
+              <div className="bg-gradient-to-r from-orange-500/10 via-red-500/10 to-pink-500/10 backdrop-blur-sm border-2 border-orange-400/30 rounded-2xl px-8 py-4 shadow-xl">
+                <div className="flex items-center gap-4">
+                  <label htmlFor="prizeCount" className="text-base font-semibold text-foreground/90 whitespace-nowrap">
+                    一轮抽奖数量：
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      id="prizeCount"
+                      type="number"
+                      min="1"
+                      max="50"
+                      value={prizeCountInput}
+                      onChange={(e) => {
+                        const value = e.target.value
+                        setPrizeCountInput(value)
+                        
+                        const numValue = parseInt(value)
+                        if (!isNaN(numValue) && numValue >= 1) {
+                          setPrizeCount(Math.min(numValue, 50))
+                        }
+                      }}
+                      onBlur={(e) => {
+                        const value = e.target.value
+                        const numValue = parseInt(value)
+                        
+                        if (value === '' || isNaN(numValue) || numValue < 1) {
+                          setPrizeCountInput("1")
+                          setPrizeCount(1)
+                        } else {
+                          const validValue = Math.min(Math.max(numValue, 1), 50)
+                          setPrizeCountInput(validValue.toString())
+                          setPrizeCount(validValue)
+                        }
+                      }}
+                      className="w-20 px-4 py-2 text-lg font-bold text-center bg-white/90 border-2 border-orange-400/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                    />
+                    <span className="text-base font-medium text-muted-foreground">个</span>
+                  </div>
+                </div>
+                <div className="mt-2 text-xs text-center text-muted-foreground/60">
+                  每次抽奖将随机抽取 <span className="font-bold text-orange-600">{prizeCount}</span> 个号码
+                </div>
+              </div>
+            </div>
+
+            {/* 大奖抽奖按钮 */}
+            <div className="flex flex-col items-center justify-center gap-4 mt-6">
+              <button
+                onClick={() => setShowGrandPrize(true)}
+                disabled={grandPrizeDrawn}
+                className={cn(
+                  "group relative px-10 py-5 bg-gradient-to-r text-white text-xl font-black rounded-2xl shadow-2xl transition-all duration-300 transform overflow-hidden",
+                  grandPrizeDrawn 
+                    ? "from-gray-500 to-gray-600 cursor-not-allowed opacity-50" 
+                    : "from-purple-600 via-pink-600 to-red-600 hover:shadow-3xl hover:scale-110 animate-pulse"
+                )}
+              >
+                {/* 按钮内部光效 */}
+                {!grandPrizeDrawn && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:animate-slide-right"></div>
+                )}
+                
+                <span className="relative z-10 flex items-center gap-3">
+                  <span className={!grandPrizeDrawn ? "animate-bounce" : ""}>🎰</span>
+                  <span>{grandPrizeDrawn ? "已抽取大奖" : "抽取超级大奖"}</span>
+                  <span className={!grandPrizeDrawn ? "animate-bounce" : ""}>🎁</span>
+                </span>
+
+                {/* 按钮边框光效 */}
+                {!grandPrizeDrawn && (
+                  <div className="absolute inset-0 rounded-2xl border-2 border-yellow-300 animate-ping"></div>
+                )}
+              </button>
+
+              {/* 中奖号码显示 */}
+              {grandPrizeDrawn && grandPrizeNumber && (
+                <div className="bg-gradient-to-r from-yellow-400/20 via-orange-500/20 to-red-500/20 backdrop-blur-sm border-2 border-yellow-400/50 rounded-2xl px-8 py-4 shadow-xl animate-fade-in">
+                  <div className="text-center">
+                    <div className="text-sm text-gray-600 mb-2 font-semibold">中奖号码</div>
+                    <div className="text-5xl font-black bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent">
+                      {grandPrizeNumber}
+                    </div>
+                    <div className="text-xs text-gray-500 mt-2">iPad (A16)</div>
+                  </div>
+                </div>
+              )}
+            </div>
+
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-16">
-        <div className="max-w-4xl">
-          <div className="grid grid-cols-3 md:grid-cols-4 gap-6 md:gap-8 justify-start">
-            {Array.from({ length: 12 }, (_, i) => (
-              <div key={i + 1} className="slide-up-animation" style={{ animationDelay: `${i * 0.1}s` }}>
+      <div className="container mx-auto px-6 py-16 lg:pr-[450px]">
+        <div className="max-w-5xl">
+          <div className="grid grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-6">
+            {Array.from({ length: 18 }, (_, i) => (
+              <div key={i + 1} className="slide-up-animation" style={{ animationDelay: `${i * 0.05}s` }}>
                 <GoldenEgg 
                   id={i + 1} 
                   isOpened={openedEggs.includes(i + 1)} 
                   onClick={() => handleEggClick(i + 1)}
-                  onShake={handleShake}
-                  onShakeStart={handleShakeStart}
-                  onShakeEnd={handleShakeEnd}
                   prizeName={eggPrizes[i + 1]?.name}
                 />
               </div>
@@ -336,16 +417,23 @@ export default function WeddingGoldenEggGame() {
 
       {/* AI Robot Assistant component */}
       <AIAssistant 
-        selectedEggId={selectedEggId} 
         openedEggs={openedEggs} 
-        onHintRequest={handleHintRequest}
-        isShaking={isAnyEggShaking}
-        currentShakeHint={currentRobotHint}
-        onSelectPerson={handleSelectPerson}
+        onSelectNumber={handleSelectNumber}
+        onClearNumbers={handleClearNumbers}
         isSpinning={isSpinning}
-        spinningTable={spinningTable}
-        spinningPerson={spinningPerson}
-        selectedPerson={selectedPerson}
+        spinningNumber={spinningNumber}
+        selectedNumber={selectedNumber}
+        selectedNumbers={selectedNumbers}
+        spinningSlots={spinningSlots}
+        revealedNumbers={revealedNumbers}
+      />
+
+      {/* Grand Prize Slot Machine */}
+      <GrandPrizeSlot
+        isOpen={showGrandPrize}
+        onClose={() => setShowGrandPrize(false)}
+        onComplete={handleGrandPrizeComplete}
+        numberRange={numberRange}
       />
     </div>
   )

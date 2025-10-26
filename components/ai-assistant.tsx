@@ -4,101 +4,19 @@ import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 
 interface AIAssistantProps {
-  selectedEggId: number | null
   openedEggs: number[]
-  onHintRequest: (eggId: number) => void
-  isShaking?: boolean
-  currentShakeHint?: string
-  onSelectPerson?: () => void
+  onSelectNumber?: () => void
+  onClearNumbers?: () => void
   isSpinning?: boolean
-  spinningTable?: number | null
-  spinningPerson?: string | null
-  selectedPerson?: {table: number, person: string} | null
+  spinningNumber?: string | null
+  selectedNumber?: string | null
+  selectedNumbers?: string[]
+  spinningSlots?: string[]
+  revealedNumbers?: string[]
 }
 
-const eggHints = [
-  { id: 1, hint: "它不说话，但能让你发出\"啊~\"的声音。", emoji: "🔨" },
-  { id: 2, hint: "液体灵感，社畜燃料，DDL伴侣。", emoji: "☕" },
-  { id: 3, hint: "你可能抽不到\"亲生的\"，但一定能收获一个\"娃\"。", emoji: "🔋" },
-  { id: 4, hint: "你可能抽不到\"亲生的\"，但一定能收获一个\"娃\"。", emoji: "🎁" },
-  { id: 5, hint: "滋滋滋", emoji: "🦷" },
-  { id: 6, hint: "嗅觉ASMR，专治\"精神内耗\"。", emoji: "💜" },
-  { id: 7, hint: "美团现在要收你3块一小时", emoji: "🏛️" },
-  { id: 8, hint: "温度升高！", emoji: "🔥" },
-  { id: 9, hint: "一种\"闻得到的东方叙事\"，比文案还香。", emoji: "🌸" },
-  { id: 10, hint: "来自南半球的\"液体宝石\"，适合\"吨吨吨\"也适合\"摇摇摇\"。", emoji: "🍷" },
-  { id: 11, hint: "通往\"童话世界\"和\"发丝顺滑\"的传送门。", emoji: "✨" },
-  { id: 12, hint: "好用、爱用", emoji: "🌊" },
-]
-
-export function AIAssistant({ selectedEggId, openedEggs, onHintRequest, isShaking = false, currentShakeHint, onSelectPerson, isSpinning = false, spinningTable, spinningPerson, selectedPerson }: AIAssistantProps) {
-  const [currentMessage, setCurrentMessage] = useState<string>("")
-  const [robotExpression, setRobotExpression] = useState<'idle' | 'thinking' | 'excited' | 'shaking'>('idle')
-
-  const getRandomEncouragement = () => {
-    const encouragements = [
-      "你好！我是你的AI小助手 ✨ 我能感知到每个金蛋的神秘能量，需要我的建议吗？",
-      "欢迎来到神奇的金蛋世界！我已经准备好为你提供智能提示了～",
-      "我的AI直觉告诉我，今天对你来说是个特别幸运的日子！",
-      "每个金蛋都散发着独特的光芒，让我帮你找到最适合的那一个吧！",
-      "我正在分析这些金蛋的能量场...有什么我可以帮助你的吗？",
-    ]
-    return encouragements[Math.floor(Math.random() * encouragements.length)]
-  }
-
-  const getSmartSuggestion = () => {
-    const unopenedEggs = Array.from({ length: 12 }, (_, i) => i + 1).filter((id) => !openedEggs.includes(id))
-
-    if (unopenedEggs.length === 0) {
-      return "恭喜你！所有的金蛋都被你发现了！每一个都是完美的选择 🎉"
-    }
-
-    const suggestions = [
-      `我的AI算法建议你试试第${unopenedEggs[Math.floor(Math.random() * unopenedEggs.length)]}号金蛋，它的能量波动很特别！`,
-      `根据你之前的选择模式，我推荐你考虑一下那些还在闪闪发光的金蛋～`,
-      `我感觉到有几个金蛋特别想被你发现，要不要听听我的直觉？`,
-      `基于概率分析，现在是开启新金蛋的最佳时机！`,
-      `我的传感器检测到某些金蛋的惊喜指数特别高哦！`,
-    ]
-
-    return suggestions[Math.floor(Math.random() * suggestions.length)]
-  }
-
-  const getSpecificHint = () => {
-    const unopenedEggs = Array.from({ length: 12 }, (_, i) => i + 1).filter((id) => !openedEggs.includes(id))
-
-    if (unopenedEggs.length === 0) return "所有金蛋都已经被发现了！"
-
-    const randomEgg = unopenedEggs[Math.floor(Math.random() * unopenedEggs.length)]
-    const hint = eggHints.find((h) => h.id === randomEgg)
-
-    return `${hint?.emoji} 第${randomEgg}号金蛋的秘密：${hint?.hint}`
-  }
-
-
-  // 监听摇动状态变化
-  useEffect(() => {
-    if (isShaking) {
-      setRobotExpression('shaking')
-      setCurrentMessage("正在感知金蛋的神秘能量... 🔮")
-    } else if (currentShakeHint) {
-      setRobotExpression('excited')
-      setCurrentMessage(currentShakeHint)
-      
-      // 3秒后恢复空闲状态
-      setTimeout(() => {
-        setRobotExpression('idle')
-        setCurrentMessage(getRandomEncouragement())
-      }, 3000)
-    }
-  }, [isShaking, currentShakeHint])
-
-  useEffect(() => {
-    if (!isShaking && !currentShakeHint) {
-      setCurrentMessage(getRandomEncouragement())
-      setRobotExpression('idle')
-    }
-  }, [isShaking, currentShakeHint])
+export function AIAssistant({ openedEggs, onSelectNumber, onClearNumbers, isSpinning = false, spinningNumber, selectedNumber, selectedNumbers = [], spinningSlots = [], revealedNumbers = [] }: AIAssistantProps) {
+  const [robotExpression, setRobotExpression] = useState<'idle' | 'thinking' | 'excited'>('idle')
 
   // 机器人GIF组件
   const RobotGif = () => {
@@ -114,24 +32,21 @@ export function AIAssistant({ selectedEggId, openedEggs, onHintRequest, isShakin
           alt="AI Robot Assistant"
           className={cn(
             "w-full h-full object-cover rounded-3xl transition-all duration-300",
-            robotExpression === 'excited' && "brightness-110 saturate-110",
-            robotExpression === 'thinking' && "brightness-105 hue-rotate-15",
-            robotExpression === 'shaking' && "brightness-125 saturate-125",
-            robotExpression === 'idle' && "brightness-90"
+            "brightness-110 saturate-110" // 始终保持较高的亮度和饱和度
           )}
           draggable={false}
           loading="eager"
         />
         
-        {/* 添加动态效果覆盖层 */}
+        {/* 永久的动态渐变效果覆盖层 - 始终显示 */}
+        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-orange-400/30 via-yellow-400/20 to-red-400/30 animate-gradient-shift" />
+        
+        {/* 额外的呼吸光效 */}
+        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-pink-400/20 via-transparent to-purple-400/20 animate-pulse" />
+        
+        {/* 根据不同状态添加额外效果 */}
         {robotExpression === 'excited' && (
-          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-yellow-400/20 via-transparent to-pink-400/20 animate-pulse" />
-        )}
-        {robotExpression === 'thinking' && (
-          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-400/20 via-transparent to-purple-400/20 animate-pulse" />
-        )}
-        {robotExpression === 'shaking' && (
-          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-orange-400/30 via-transparent to-red-400/30 animate-ping" />
+          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-yellow-400/30 via-transparent to-pink-400/30 animate-ping" />
         )}
       </div>
     )
@@ -146,10 +61,10 @@ export function AIAssistant({ selectedEggId, openedEggs, onHintRequest, isShakin
         </div>
         
         {/* 抽奖按钮 - 在机器人下方 */}
-        {onSelectPerson && (
+        {onSelectNumber && (
           <div className="mt-4 flex justify-center">
             <button
-              onClick={onSelectPerson}
+              onClick={onSelectNumber}
               disabled={isSpinning}
               className={cn(
                 "px-8 py-4 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white font-bold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden",
@@ -171,7 +86,7 @@ export function AIAssistant({ selectedEggId, openedEggs, onHintRequest, isShakin
                 ) : (
                   <>
                     <span className="animate-bounce">🎯</span>
-                    <span>AI随机选人</span>
+                    <span>随机抽数字</span>
                     <span className="animate-bounce">🎯</span>
                   </>
                 )}
@@ -181,8 +96,21 @@ export function AIAssistant({ selectedEggId, openedEggs, onHintRequest, isShakin
         )}
         
         {/* 老虎机效果显示 */}
-        {(isSpinning || selectedPerson) && (
-          <div className="mt-4 bg-gradient-to-br from-yellow-400/20 via-orange-500/20 to-red-500/20 backdrop-blur-sm border-2 border-yellow-400/50 rounded-2xl p-4 shadow-2xl max-w-xs relative overflow-hidden">
+        {(isSpinning || selectedNumbers.length > 0) && (
+          <div className="mt-4 bg-gradient-to-br from-yellow-400/20 via-orange-500/20 to-red-500/20 backdrop-blur-sm border-2 border-yellow-400/50 rounded-2xl p-6 shadow-2xl max-w-md relative overflow-hidden">
+            {/* 关闭按钮 - 只在抽奖完成后显示 */}
+            {!isSpinning && selectedNumbers.length > 0 && onClearNumbers && (
+              <button
+                onClick={onClearNumbers}
+                className="absolute top-3 right-3 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-gray-600/80 hover:bg-gray-700 text-white transition-all duration-200 hover:scale-110 shadow-lg"
+                aria-label="关闭"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
+            
             {/* 跑马灯背景效果 */}
             {isSpinning && (
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-300/30 to-transparent animate-slide-right"></div>
@@ -194,7 +122,7 @@ export function AIAssistant({ selectedEggId, openedEggs, onHintRequest, isShakin
             )}
             
             <div className="text-center relative z-10">
-              <div className="text-lg font-bold text-yellow-700 mb-2 flex items-center justify-center gap-2">
+              <div className="text-lg font-bold text-yellow-700 mb-4 flex items-center justify-center gap-2">
                 {isSpinning ? (
                   <>
                     <span className="animate-bounce">🎰</span>
@@ -210,26 +138,46 @@ export function AIAssistant({ selectedEggId, openedEggs, onHintRequest, isShakin
                 )}
               </div>
               
-              {/* 桌号显示 - 老虎机风格 */}
-              <div className="mb-4">
-                <div className="text-sm text-gray-600 mb-2 font-semibold">桌号</div>
-                <div className={cn(
-                  "text-3xl font-black text-primary bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent",
-                  isSpinning && spinningTable && "animate-pulse"
-                )}>
-                  {spinningTable || selectedPerson?.table || "---"}
-                </div>
-              </div>
-              
-              {/* 人员显示 - 老虎机风格 */}
+              {/* 数字显示 - 老虎机风格 */}
               <div>
-                <div className="text-sm text-gray-600 mb-2 font-semibold">人员</div>
-                <div className={cn(
-                  "text-xl font-bold text-secondary bg-gradient-to-r from-green-500 to-blue-600 bg-clip-text text-transparent truncate",
-                  isSpinning && spinningPerson && "animate-pulse"
-                )}>
-                  {spinningPerson || selectedPerson?.person || "---"}
+                <div className="text-sm text-gray-600 mb-3 font-semibold">
+                  {spinningSlots.length > 1 || selectedNumbers.length > 1 ? `幸运数字 (共${Math.max(spinningSlots.length, selectedNumbers.length)}个)` : "幸运数字"}
                 </div>
+                
+                {isSpinning ? (
+                  <div className="flex flex-wrap gap-3 justify-center">
+                    {spinningSlots.map((slotNum, index) => {
+                      const isRevealed = index < revealedNumbers.length
+                      const displayNum = isRevealed ? revealedNumbers[index] : slotNum
+                      
+                      return (
+                        <div 
+                          key={index}
+                          className={cn(
+                            "text-4xl font-black px-4 py-3 rounded-xl shadow-lg transition-all duration-300 min-w-[100px] text-center",
+                            isRevealed 
+                              ? "bg-gradient-to-r from-blue-500 via-purple-600 to-pink-600 bg-clip-text text-transparent bg-white/70 scale-110 animate-bounce" 
+                              : "bg-gradient-to-r from-orange-500 via-yellow-500 to-red-500 bg-clip-text text-transparent bg-white/30 animate-pulse"
+                          )}
+                        >
+                          {displayNum}
+                        </div>
+                      )
+                    })}
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-3 justify-center">
+                    {selectedNumbers.map((num, index) => (
+                      <div 
+                        key={index}
+                        className="text-4xl font-black bg-gradient-to-r from-blue-500 via-purple-600 to-pink-600 bg-clip-text text-transparent px-4 py-3 bg-white/70 rounded-xl shadow-lg animate-fade-in"
+                        style={{ animationDelay: `${index * 0.1}s` }}
+                      >
+                        {num}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
               
               {/* 装饰性元素 */}
@@ -243,26 +191,6 @@ export function AIAssistant({ selectedEggId, openedEggs, onHintRequest, isShakin
           </div>
         )}
       </div>
-
-      {/* 机器人提示气泡 - 在机器人上方，保持合理距离 */}
-      {(isShaking || currentShakeHint || robotExpression !== 'idle') && (
-        <div className="fixed bottom-[35rem] right-6 z-50">
-          <div className={cn(
-            "bg-white/95 backdrop-blur-sm border border-blue-200/50 rounded-3xl p-6 shadow-xl max-w-sm",
-            "transform transition-all duration-300 animate-fade-in",
-            isShaking && "animate-pulse"
-          )}>
-            <div className="text-base text-blue-700 font-medium leading-relaxed">
-              {currentMessage}
-            </div>
-            <div className="text-sm text-blue-500/70 mt-2">
-              AI机器人助手 🤖
-            </div>
-            {/* 气泡箭头指向下方机器人 */}
-            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 rotate-45 w-4 h-4 bg-white border-r border-b border-blue-200/50"></div>
-          </div>
-        </div>
-      )}
     </>
   )
 }

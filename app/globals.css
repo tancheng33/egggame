@@ -434,6 +434,53 @@
   }
 }
 
+/* 烟花动画 */
+@keyframes firework {
+  0% {
+    transform: translate(0, 0) scale(0);
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx, 0), var(--ty, 0)) scale(1);
+    opacity: 0;
+  }
+}
+
+/* 向下滑动动画 */
+@keyframes slide-down {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* Bot.gif 动态渐变效果 */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+    opacity: 0.3;
+  }
+  25% {
+    opacity: 0.4;
+  }
+  50% {
+    background-position: 100% 50%;
+    opacity: 0.35;
+  }
+  75% {
+    opacity: 0.4;
+  }
+  100% {
+    background-position: 0% 50%;
+    opacity: 0.3;
+  }
+}
+
 .animate-slide-right {
   animation: slide-right 1s linear infinite;
 }
@@ -444,4 +491,19 @@
 
 .animate-bounce-fast {
   animation: bounce-fast 0.3s ease-in-out infinite;
+}
+
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease-in-out infinite;
+}
+
+.animate-firework {
+  animation: firework 3s ease-out forwards;
+  --tx: calc((Math.random() - 0.5) * 200px);
+  --ty: calc((Math.random() - 0.5) * 200px);
+}
+
+.animate-slide-down {
+  animation: slide-down 1s linear infinite;
 }
