@@ -19,7 +19,7 @@ expect "password:"
 send "$password\r"
 expect eof
 
-spawn ssh -o StrictHostKeyChecking=no root@106.14.32.99 "cd /usr/share/nginx/html && rm -rf * && tar -xzf /tmp/wedding-game.tar.gz && rm /tmp/wedding-game.tar.gz && echo '部署完成！'"
+spawn ssh -o StrictHostKeyChecking=no root@106.14.32.99 "cd /root/site/dist && rm -rf * && tar -xzf /tmp/wedding-game.tar.gz && rm /tmp/wedding-game.tar.gz && echo '部署完成！'"
 expect "password:"
 send "$password\r"
 expect eof
