@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils"
 
 const prizes = [
   { id: 1, name: "小米加湿器", price: "¥199", description: "智能加湿，健康生活" },
-  { id: 2, name: "SKG护颈枕", price: "¥299", description: "呵护颈椎，舒适按摩" },
+  { id: 2, name: "skg护颈枕", price: "¥299", description: "呵护颈椎，舒适按摩" },
   { id: 3, name: "小米剃须刀", price: "¥169", description: "精准剃须，清爽干净" },
   { id: 4, name: "美的空气炸锅", price: "¥399", description: "健康烹饪，美味无油" },
   { id: 5, name: "小米香氛机", price: "¥139", description: "香氛扩散，优雅生活" },
@@ -19,7 +19,7 @@ const prizes = [
   { id: 7, name: "美的榨汁机", price: "¥259", description: "新鲜果汁，营养健康" },
   { id: 8, name: "美的除螨吸尘器", price: "¥499", description: "深层清洁，除螨杀菌" },
   { id: 9, name: "绿联充电宝", price: "¥199", description: "大容量快充，续航无忧" },
-  { id: 10, name: "Usmile电动牙刷", price: "¥299", description: "专业口腔护理，洁白牙齿" },
+  { id: 10, name: "usmile电动牙刷", price: "¥299", description: "专业口腔护理，洁白牙齿" },
   { id: 11, name: "美的破壁机", price: "¥599", description: "破壁料理，营养丰富" },
   { id: 12, name: "美的挂烫机", price: "¥399", description: "快速熨烫，平整如新" },
   { id: 13, name: "美的电蒸锅", price: "¥299", description: "蒸汽烹饪，营养保留" },
