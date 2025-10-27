@@ -51,10 +51,10 @@ export default function WeddingGoldenEggGame() {
   const [grandPrizeNumber, setGrandPrizeNumber] = useState<string>("") // 中奖号码
   const [grandPrizeDrawn, setGrandPrizeDrawn] = useState(false) // 大奖是否已抽过
   const [assignedPrizes] = useState<Record<number, (typeof prizes)[0]>>(() => {
-    const shuffled = [...prizes].sort(() => Math.random() - 0.5)
+    // 按照固定顺序分配奖品到金蛋：1号金蛋=1号奖品，2号金蛋=2号奖品...
     const map: Record<number, (typeof prizes)[0]> = {}
     for (let i = 1; i <= 18; i++) {
-      map[i] = shuffled[i - 1]
+      map[i] = prizes[i - 1] // 直接按顺序分配，不随机打乱
     }
     return map
   })
